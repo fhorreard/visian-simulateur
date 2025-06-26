@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur de Rentabilité - Visian Pulse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Styles personnalisés pour le curseur */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #3b82f6; /* blue-500 */
+            cursor: pointer;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #3b82f6;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Simulateur de Rentabilité</h1>
+            <p class="mt-2 text-lg text-slate-600">Programme d'Affiliation Visian Pulse</p>
+        </header>
+
+        <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12">
+                
+                <!-- Section des contrôles -->
+                <div class="lg:col-span-2 space-y-8">
+                    <h2 class="text-2xl font-bold text-slate-900 border-b pb-2">Paramètres de la Mission</h2>
+                    
+                    <div>
+                        <label for="missionValue" class="block text-lg font-semibold text-slate-700">Valeur totale de la mission</label>
+                        <p class="text-sm text-slate-500 mb-3">Montant total HT facturé au client final.</p>
+                        <input type="range" id="missionValue" min="10000" max="1000000" step="1000" value="120000" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        <div id="missionValueDisplay" class="text-center text-2xl font-bold text-blue-600 mt-2"></div>
+                    </div>
+
+                    <div>
+                        <label for="freelanceStatus" class="block text-lg font-semibold text-slate-700">Statut du Freelance</label>
+                        <p class="text-sm text-slate-500 mb-3">Le statut de l'apporteur d'affaires.</p>
+                        <select id="freelanceStatus" class="w-full p-3 bg-slate-100 border border-slate-200 rounded-lg text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="Bronze">Bronze</option>
+                            <option value="Silver" selected>Silver</option>
+                            <option value="Gold">Gold</option>
+                            <option value="Elite">Elite</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="strategicLevel" class="block text-lg font-semibold text-slate-700">Niveau Stratégique</label>
+                        <p class="text-sm text-slate-500 mb-3">Calculé automatiquement, modifiable manuellement.</p>
+                        <select id="strategicLevel" class="w-full p-3 bg-slate-100 border border-slate-200 rounded-lg text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="N1">N1 : Standard (< 50K€)</option>
+                            <option value="N2">N2 : Clé (≥ 50K€)</option>
+                            <option value="N3">N3 : Stratégique (> 500K€)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section des résultats -->
+                <div class="lg:col-span-3 bg-slate-50 rounded-lg p-6">
+                    <h2 class="text-2xl font-bold text-slate-900 border-b pb-2 mb-6">Résultats Financiers</h2>
+                    <div class="space-y-4">
+                        
+                        <div class="flex items-start bg-white p-4 rounded-lg shadow-sm">
+                            <div class="p-3 bg-blue-100 rounded-full mr-4"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+                            <div><p class="text-sm font-medium text-slate-500">CA généré pour Visian</p><p id="ca-output" class="text-2xl md:text-3xl font-extrabold text-slate-800">0 €</p></div>
+                        </div>
+                        
+                        <div class="flex items-start bg-white p-4 rounded-lg shadow-sm">
+                            <div class="p-3 bg-green-100 rounded-full mr-4"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
+                            <div><p class="text-sm font-medium text-slate-500">Marge Brute Visian (14%)</p><p id="gross-margin-output" class="text-2xl md:text-3xl font-extrabold text-slate-800">0 €</p></div>
+                        </div>
+
+                        <div class="flex items-start bg-white p-4 rounded-lg shadow-sm">
+                            <div class="p-3 bg-amber-100 rounded-full mr-4"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6.2c-1.2-1.2-2-1.2-3.2 0L3 20.2c-1.2 1.2-1.2 2 0 3.2 1.2 1.2 2 1.2 3.2 0L20.2 9.4c1.2-1.2 1.2-2 0-3.2z"></path><path d="m5.2 11.2 3 3"></path><path d="m14.2 3.2 3 3"></path><path d="M18 7.2 11 14.2"></path><path d="m20.2 18-5-5"></path></svg></div>
+                            <div><p class="text-sm font-medium text-slate-500">Commission reversée au Freelance</p><p id="commission-output" class="text-2xl md:text-3xl font-extrabold text-slate-800">0 €</p></div>
+                        </div>
+
+                        <div class="flex items-start bg-white p-4 rounded-lg shadow-sm ring-2 ring-blue-500">
+                             <div class="p-3 bg-blue-100 rounded-full mr-4"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+                             <div class="flex-grow"><p class="text-sm font-medium text-slate-600">Bénéfice Net pour Visian</p><p id="net-profit-output" class="text-2xl md:text-3xl font-extrabold text-blue-600">0 €</p></div>
+                             <div class="text-right"><p class="text-sm font-medium text-slate-600">Marge Nette</p><p id="net-margin-output" class="text-2xl md:text-3xl font-extrabold text-blue-600">0%</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="text-center mt-8 text-sm text-slate-400">
+            <p>&copy; 2025 Visian. Tous droits réservés.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // --- ÉLÉMENTS DU DOM ---
+        const missionValueSlider = document.getElementById('missionValue');
+        const missionValueDisplay = document.getElementById('missionValueDisplay');
+        const freelanceStatusSelect = document.getElementById('freelanceStatus');
+        const strategicLevelSelect = document.getElementById('strategicLevel');
+        
+        const caOutput = document.getElementById('ca-output');
+        const grossMarginOutput = document.getElementById('gross-margin-output');
+        const commissionOutput = document.getElementById('commission-output');
+        const netProfitOutput = document.getElementById('net-profit-output');
+        const netMarginOutput = document.getElementById('net-margin-output');
+
+        // --- CONSTANTES ET DONNÉES ---
+        const VISIAN_MARGIN_RATE = 0.14; // Marge de 14% de Visian
+        const commissionRates = {
+            Bronze: { N1: 0.02, N2: 0.025, N3: 0.03 },
+            Silver: { N1: 0.03, N2: 0.035, N3: 0.04 },
+            Gold:   { N1: 0.04, N2: 0.045, N3: 0.05 },
+            Elite:  { N1: 0.045, N2: 0.05, N3: 0.055 }
+        };
+
+        // --- FONCTIONS ---
+        
+        function formatCurrency(value) {
+            return value.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+        
+        function autoUpdateStrategicLevel() {
+            const value = parseFloat(missionValueSlider.value);
+            if (value > 500000) {
+                strategicLevelSelect.value = 'N3';
+            } else if (value >= 50000) {
+                strategicLevelSelect.value = 'N2';
+            } else {
+                strategicLevelSelect.value = 'N1';
+            }
+        }
+
+        function calculateAndDisplay() {
+            const missionValue = parseFloat(missionValueSlider.value);
+            const freelanceStatus = freelanceStatusSelect.value;
+            const strategicLevel = strategicLevelSelect.value;
+
+            const grossMargin = missionValue * VISIAN_MARGIN_RATE;
+            const commissionRate = commissionRates[freelanceStatus][strategicLevel];
+            const freelanceCommission = grossMargin * commissionRate;
+            const netProfit = grossMargin - freelanceCommission;
+            const netMarginPercentage = missionValue > 0 ? (netProfit / missionValue) * 100 : 0;
+
+            missionValueDisplay.textContent = formatCurrency(missionValue);
+            caOutput.textContent = formatCurrency(missionValue);
+            grossMarginOutput.textContent = formatCurrency(grossMargin);
+            commissionOutput.textContent = formatCurrency(freelanceCommission);
+            netProfitOutput.textContent = formatCurrency(netProfit);
+            netMarginOutput.textContent = `${netMarginPercentage.toFixed(2)}%`;
+        }
+
+        // --- ÉCOUTEURS D'ÉVÉNEMENTS ---
+        missionValueSlider.addEventListener('input', () => {
+            autoUpdateStrategicLevel();
+            calculateAndDisplay();
+        });
+        freelanceStatusSelect.addEventListener('change', calculateAndDisplay);
+        strategicLevelSelect.addEventListener('change', calculateAndDisplay);
+
+        // --- INITIALISATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            autoUpdateStrategicLevel();
+            calculateAndDisplay();
+        });
+
+    </script>
+</body>
+</html>
+
